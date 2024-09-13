@@ -40,6 +40,12 @@ sudo docker run -it --device /dev/kvm -p 50922:10022 -e "DISPLAY=${DISPLAY:-:0.0
 ```shell
 -e RAM=3
 ```
+修改CPU最大使用量
+```shell
+-e EXTRA='-smp 6,sockets=3,cores=2' # 表示使用6个逻辑处理器，其中有3个物理处理器，每个处理器有2个核心。
+-e EXTRA='-smp 8,sockets=4,cores=2' # 表示使用8个逻辑处理器，配置为4个物理处理器，每个处理器有2个核心。
+-e EXTRA='-smp 16,sockets=8,cores=2' # 表示使用16个逻辑处理器，配置为8个物理处理器，每个处理器有2个核心。
+```
 ## 如何重启
 ```shell
 # find last container
