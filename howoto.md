@@ -36,7 +36,10 @@ sudo docker run -it --device /dev/kvm -p 50922:10022 -e "DISPLAY=${DISPLAY:-:0.0
 ```shell
 -e WIDTH=2560 -e HEIGHT=1440
 ```
-
+修改内存
+```shell
+-e RAM=3
+```
 ## 如何重启
 ```shell
 # find last container
