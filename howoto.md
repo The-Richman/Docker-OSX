@@ -22,6 +22,11 @@ KVM acceleration can be used
 ```shell
 sudo apt -y install bridge-utils cpu-checker libvirt-clients libvirt-daemon qemu qemu-kvm
 ```
+Ubuntu24.04换源
+```shell
+https://blog.csdn.net/v997282418/article/details/140105030
+清华镜像源： https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/
+```
 3. 设置docker
 在docker desktop中->`设置`->`Resources`->`WSL integration`, 开启`Enable integration with my default WSL distro`
 4. 安装x11-apps
