@@ -1,6 +1,6 @@
 # how to run a macos
 ## build images
-```text
+```shell
 git clone https://github.com/sickcodes/Docker-OSX.git
 cd Docker-OSX
 docker build -t sickcodes/docker-osx:sonoma --build-arg SHORTNAME=sonoma .
@@ -14,30 +14,67 @@ nestedVirtualization=true
 ```
 2. 检查kvm是否开启
 输入`wsl`进入wsl后, 输入`kvm-ok`, 如果已经成功开启, 输出为
-```text
+```shell
 INFO: /dev/kvm exists
 KVM acceleration can be used
 ```
 如果没有开启, 输入下面的命令进行安装
-```text
+```shell
 sudo apt -y install bridge-utils cpu-checker libvirt-clients libvirt-daemon qemu qemu-kvm
 ```
 3. 设置docker
 在docker desktop中->`设置`->`Resources`->`WSL integration`, 开启`Enable integration with my default WSL distro`
 4. 安装x11-apps
-```text
+```shell
 sudo apt install x11-apps -y
 ```
 5. wsl中执行
-```text
+```shell
 sudo docker run -it --device /dev/kvm -p 50922:10022 -e "DISPLAY=${DISPLAY:-:0.0}" -v /mnt/wslg/.X11-unix:/tmp/.X11-unix -e GENERATE_UNIQUE=true -e CPU='Haswell-noTSX' -e CPUID_FLAGS='kvm=on,vendor=GenuineIntel,+invtsc,vmware-cpuid-freq=on' -e MASTER_PLIST_URL='https://raw.githubusercontent.com/sickcodes/osx-serial-generator/master/config-custom-sonoma.plist' sickcodes/docker-osx:sonoma
+```
+如果需要修改分辨率, 添加参数
+```shell
+-e WIDTH=2560 -e HEIGHT=1440
 ```
 
 ## 如何重启
-```text
+```shell
 # find last container
 docker ps -a
 
 # docker start old container with -i for interactive, -a for attach STDIN/STDOUT
-docker start -ai -i <Replace this with your ID>
+docker start -ai <Replace this with your ID>
+```
+
+# 进入镜像后如何操作
+1. 进入`macos base system`
+2. 在`macOS Utility`选择`Disk Utility`
+![img_1.png](img_1.png)
+3. 找到最大的盘进行erase
+![img.png](img.png)
+4. 点×返回到`macOS Utility`选择`reinstall macos`, 点击`continue`
+
+# 如何连接iPhone
+1. 下载项目
+```shell
+sudo apt install avahi-daemon socat usbmuxd
+```
+```shell
+cd /temp
+wget https://github.com/corellium/usbfluxd/releases/download/v1.0/usbfluxd-x86_64-libc6-libdbus13.tar.gz
+tar -xzvf usbfluxd-x86_64-libc6-libdbus13.tar.gz
+cd usbfluxd-x86_64-libc6-libdbus13
+sudo systemctl start usbmuxd
+sudo avahi-daemon
+```
+terminal2中执行
+```shell
+# on host
+sudo systemctl restart usbmuxd
+sudo socat tcp-listen:5000,fork unix-connect:/var/run/usbmuxd
+```
+terminal3中执行
+```shell
+cd /tmp/usbfluxd-x86_64-libc6-libdbus13
+sudo ./usbfluxd -f -n
 ```
